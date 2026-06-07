@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enjoyable Conversations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f3eeff;
+      color: #3a2f5b;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    header h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #6c4fcf;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1.05rem;
+      color: #8b7ab8;
+      font-weight: 600;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .episode {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 2px 12px rgba(108, 79, 207, 0.08);
+    }
+
+    .episode h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.85rem;
+      color: #4a3380;
+    }
+
+    audio {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    #loading {
+      text-align: center;
+      color: #9b8ec4;
+      font-weight: 600;
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Enjoyable Conversations</h1>
+    <p>a podcast</p>
+  </header>
+  <main id="episodes">
+    <div id="loading">Loading episodes...</div>
+  </main>
+  <script>
+    fetch('data/episodes.json')
+      .then(r => r.json())
+      .then(episodes => {
+        const container = document.getElementById('episodes');
+        container.innerHTML = episodes.map(ep => `
+          <div class="episode">
+            <h2>${ep.title}</h2>
+            <audio controls preload="metadata">
+              <source src="${ep.url}" type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById('episodes').innerHTML =
+          '<div id="loading">Could not load episodes.</div>';
+      });
+  </script>
+</body>
+</html>
